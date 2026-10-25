@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="monetag" content="dea25079f1580a99a841ca8af6334417">
+    <title>K12 Auto — Cổng Mở Khóa Bản Quyền 24h (Rewarded Ad Portal)</title>
+    <style>
+        :root {
+            --orange-500: #f97316;
+            --orange-600: #ea580c;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --slate-950: #070d18;
+            --slate-900: #0b1120;
+            --slate-800: #172235;
+            --slate-700: #2a384f;
+            --slate-400: #94a3b8;
+            --slate-300: #cbd5e1;
+            --slate-100: #f8fafc;
+            --green-500: #22c55e;
+            --green-400: #4ade80;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 20%, #1a2a44 0%, var(--slate-950) 80%);
+            color: var(--slate-100);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .portal-card {
+            background: rgba(23, 34, 53, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(249, 115, 22, 0.35);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(249, 115, 22, 0.15);
+            border-radius: var(--radius);
+            max-width: 520px;
+            width: 100%;
+            padding: 28px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange-600), var(--amber-400), var(--orange-500));
+            box-shadow: 0 0 12px rgba(249, 115, 22, 0.8);
+        }
+
+        .header-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(249, 115, 22, 0.12);
+            border: 1px solid rgba(249, 115, 22, 0.45);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+            margin-bottom: 16px;
+            font-size: 30px;
+        }
+
+        .portal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--orange-500);
+            text-shadow: 0 0 14px rgba(249, 115, 22, 0.4);
+            margin-bottom: 6px;
+        }
+
+        .portal-subtitle {
+            font-size: 13px;
+            color: var(--slate-400);
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        /* ── Ad Stage / Video Player Simulator ── */
+        .ad-stage {
+            background: var(--slate-900);
+            border: 1px solid var(--slate-700);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .ad-banner-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--amber-400);
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+
+        .video-box {
+            height: 180px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border: 1px dashed rgba(249, 115, 22, 0.35);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-animation {
+            font-size: 44px;
+            animation: bounce 1.4s infinite ease-in-out;
+            margin-bottom: 8px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .ad-status-text {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--slate-300);
+        }
+
+        /* ── Progress & Countdown ── */
+        .progress-wrapper {
+            margin-top: 14px;
+            width: 100%;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: var(--slate-700);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--orange-500), var(--amber-400));
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.8);
+            border-radius: 3px;
+            transition: width 0.3s linear;
+        }
+
+        .countdown-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+
+        .countdown-number {
+            font-weight: 700;
+            color: var(--amber-400);
+            font-size: 14px;
+        }
+
+        /* ── Completion Badge ── */
+        .success-box {
+            display: none;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 18px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-title {
+            color: var(--green-400);
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .success-desc {
+            font-size: 12px;
+            color: var(--slate-300);
+        }
+
+        /* ── Action Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 22px;
+            font-size: 13.5px;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(249, 115, 22, 0.45);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.65);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--green-500), #16a34a);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+        }
+
+        .footer-note {
+            font-size: 11px;
+            color: var(--slate-400);
+            margin-top: 16px;
+        }
+    </style>
+
+    <!-- 
+      ====================================================================
+      MONETAG SDK & DIRECT LINK INTEGRATION
+      ====================================================================
+    -->
+    <script>
+        // Monetag configuration
+        window.monetagRewardedAdLoaded = false;
+        window.MONETAG_ZONE_ID = "12119614";
+        window.MONETAG_DIRECT_LINK = "https://uplcm.com/4/12119614";
+    </script>
+</head>
+<body>
+
+    <div class="portal-card">
+        <div class="header-icon">🛡️</div>
+        <h1 class="portal-title">K12 Auto Rewarded Ad Portal</h1>
+        <p class="portal-subtitle">Xem hết video tài trợ ngắn bên dưới để tự động kích hoạt phiên bản quyền <strong>24 giờ</strong> cho tiện ích K12 Auto.</p>
+
+        <div class="ad-stage" id="ad-stage">
+            <span class="ad-banner-badge" id="ad-badge">Đang Phát Video Quảng Cáo Tài Trợ</span>
+            
+            <div class="video-box" id="video-box">
+                <div class="video-animation" id="video-anim">🎬</div>
+                <div class="ad-status-text" id="ad-status-text">Đang kết nối mạng quảng cáo Monetag...</div>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+                <div class="countdown-meta">
+                    <span>Thời gian tối thiểu:</span>
+                    <span>Còn lại: <span class="countdown-number" id="countdown-num">15</span> giây</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-box" id="success-box">
+            <div class="success-title">🎉 Mở Khóa Bản Quyền Thành Công!</div>
+            <div class="success-desc">Phiên sử dụng 24h đã được cấp. Tab này sẽ tự động đóng sau 2 giây...</div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="btn-action" disabled>
+            ⏳ Vui lòng xem hết video...
+        </button>
+
+        <div class="footer-note">
+            Powered by ZitPeo • Hệ thống xác thực &amp; cấp quyền tự động
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const TOTAL_DURATION_SEC = 15;
+            let remainingSec = TOTAL_DURATION_SEC;
+            let isCompleted = false;
+
+            const progressBar = document.getElementById('progress-bar');
+            const countdownNum = document.getElementById('countdown-num');
+            const adStatusText = document.getElementById('ad-status-text');
+            const successBox = document.getElementById('success-box');
+            const btnAction = document.getElementById('btn-action');
+            const adBadge = document.getElementById('ad-badge');
+            const videoAnim = document.getElementById('video-anim');
+
+            // Cập nhật giao diện tiến trình đếm ngược
+            function updateTimerDisplay() {
+                const elapsed = TOTAL_DURATION_SEC - remainingSec;
+                const percent = Math.min(100, Math.round((elapsed / TOTAL_DURATION_SEC) * 100));
+                
+                if (progressBar) progressBar.style.width = percent + '%';
+                if (countdownNum) countdownNum.textContent = remainingSec;
+
+                if (remainingSec > 10) {
+                    adStatusText.textContent = 'Đang phát video quảng cáo đối tác Monetag...';
+                } else if (remainingSec > 5) {
+                    adStatusText.textContent = 'Gần hoàn tất, vui lòng không đóng tab...';
+                } else if (remainingSec > 0) {
+                    adStatusText.textContent = 'Chuẩn bị cấp Token bản quyền 24h...';
+                }
+            }
+
+            // Xử lý khi xem xong quảng cáo
+            async function completeRewardAd() {
+                if (isCompleted) return;
+                isCompleted = true;
+
+                if (progressBar) progressBar.style.width = '100%';
+                if (countdownNum) countdownNum.textContent = '0';
+                if (adBadge) {
+                    adBadge.textContent = 'Xác Nhận Thành Công';
+                    adBadge.style.color = 'var(--green-400)';
+                    adBadge.style.borderColor = 'var(--green-400)';
+                }
+                if (videoAnim) videoAnim.textContent = '✅';
+                if (adStatusText) adStatusText.textContent = 'Đã nhận thưởng bản quyền!';
+
+                if (successBox) successBox.style.display = 'block';
+
+                if (btnAction) {
+                    btnAction.disabled = false;
+                    btnAction.className = 'btn btn-success';
+                    btnAction.textContent = '✨ Hoàn tất & Đóng tab';
+                    btnAction.onclick = () => window.close();
+                }
+
+                // 1. Cấp License Token 24h an toàn vào chrome.storage.local
+                const token = 'token_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+                const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 giờ
+
+                try {
+                    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+                        await chrome.storage.local.set({
+                            k12LicenseToken: token,
+                            k12LicenseExpiresAt: expiresAt
+                        });
+                    }
+                } catch (e) {
+                    console.log('Direct storage set skipped:', e);
+                }
+
+                // 2. Gửi tín hiệu thông báo cho Service Worker
+                try {
+                    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+                        chrome.runtime.sendMessage({
+                            action: 'REWARD_AD_COMPLETED',
+                            type: 'REWARD_AD_COMPLETED',
+                            token: token,
+                            expiresAt: expiresAt
+                        }, (resp) => {
+                            console.log('Service worker ack:', resp);
+                        });
+                    }
+                } catch (e) {
+                    console.log('Runtime message skipped:', e);
+                }
+
+                // 3. Tự động đóng tab sau 2 giây
+                setTimeout(() => {
+                    try {
+                        window.close();
+                    } catch (_) {}
+                }, 2200);
+            }
+
+            // Bộ đếm thời gian quảng cáo
+            const timer = setInterval(() => {
+                remainingSec--;
+                updateTimerDisplay();
+
+                if (remainingSec <= 0) {
+                    clearInterval(timer);
+                    completeRewardAd();
+                }
+            }, 1000);
+
+            updateTimerDisplay();
+        })();
+    </script>
+</body>
+</html>
