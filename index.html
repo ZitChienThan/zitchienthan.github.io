@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="monetag" content="dea25079f1580a99a841ca8af6334417">
-    <title>K12 Auto — Cổng Mở Khóa Bản Quyền 24h (100% Video Rewarded Ad)</title>
+    <title>K12 Auto Rewarded Ad Portal — Cổng Mở Khóa Bản Quyền 24h (100% Video Rewarded Ad)</title>
 
     <!-- Official Monetag In-Page Push SDK (Account: ryanbach2017@gmail.com | Zone: 12120711) -->
-    <!-- Non-intrusive native format - NO popunders / click-jacking -->
     <script>(function(s){s.dataset.zone='12120711',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
     <style>
@@ -52,7 +51,7 @@
             border: 1px solid rgba(249, 115, 22, 0.4);
             box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7), 0 0 35px rgba(249, 115, 22, 0.2);
             border-radius: var(--radius);
-            max-width: 560px;
+            max-width: 580px;
             width: 100%;
             padding: 28px 24px;
             text-align: center;
@@ -216,6 +215,9 @@
             margin-top: 10px;
             margin-bottom: 8px;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* ── Progress Bar ── */
@@ -386,17 +388,16 @@
         </div>
 
         <h1 class="portal-title">Cổng Kích Hoạt Bản Quyền 24h</h1>
-        <p class="portal-subtitle">Xem hết video quảng cáo tài trợ <strong>15 giây</strong> bên dưới để mở khóa toàn bộ tính năng tự động học tập.</p>
+        <p class="portal-subtitle">Xem hết video quảng cáo tài trợ bên dưới để mở khóa toàn bộ tính năng tự động học tập.</p>
 
         <div class="video-stage" id="video-stage">
             <div class="video-screen" id="video-screen">
-                <video id="ad-video" autoplay muted playsinline loop preload="auto">
-                    <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
-                    <source src="https://vjs.zencdn.net/v/oceans.webm" type="video/webm">
+                <video id="ad-video" autoplay muted playsinline preload="auto">
+                    <!-- Dynamic Source Loaded by JavaScript -->
                 </video>
-                <div class="video-overlay-badge">
+                <div class="video-overlay-badge" id="video-sponsor-badge">
                     <span class="video-live-dot"></span>
-                    <span>SPONSORED AD • MONETAG</span>
+                    <span id="video-sponsor-text">SPONSORED AD • MONETAG</span>
                 </div>
                 <button type="button" class="video-sound-toggle" id="btn-toggle-sound" title="Bật/Tắt âm thanh">
                     🔇 Bật âm
@@ -413,7 +414,7 @@
                     <div class="progress-bar-fill" id="progress-bar"></div>
                 </div>
                 <div class="countdown-meta">
-                    <span>Thời lượng yêu cầu: <strong>15 giây</strong></span>
+                    <span>Thời lượng yêu cầu: <strong id="duration-req-label">15 giây</strong></span>
                     <span>Còn lại: <span class="countdown-number" id="countdown-num">15</span>s</span>
                 </div>
             </div>
@@ -425,7 +426,7 @@
         </div>
 
         <button type="button" class="btn btn-primary" id="btn-action" disabled>
-            ⏳ Vui lòng xem hết video quảng cáo (15s)...
+            ⏳ Vui lòng xem hết video quảng cáo...
         </button>
 
         <div class="footer-note">
@@ -438,7 +439,7 @@
         (function() {
             'use strict';
 
-            // Absolute popup blocker: Prevent any rogue script or popunder from opening windows
+            // Absolute popup blocker: Prevent rogue popunders
             let allowPopups = false;
             const nativeWindowOpen = window.open;
             window.open = function(url, target, features) {
@@ -456,7 +457,53 @@
                 });
             }
 
-            const TOTAL_DURATION_SEC = 15;
+            // Pool of diversified, high-quality sponsored video clips (never repeat single video)
+            const SPONSOR_PLAYLIST = [
+                {
+                    title: "Google Cloud Platform • Generative AI & Cloud Services",
+                    sponsor: "Google Cloud Official Partner",
+                    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                    duration: 15
+                },
+                {
+                    title: "Next-Gen AI & Machine Learning Infrastructure",
+                    sponsor: "Gemini Developer Network",
+                    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                    duration: 15
+                },
+                {
+                    title: "Chromium Open Web & Cloud Ecosystem",
+                    sponsor: "Modern Web Guidance",
+                    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                    duration: 15
+                },
+                {
+                    title: "Cloud Stream & High Performance Computing",
+                    sponsor: "Global Tech Sponsor",
+                    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4",
+                    duration: 15
+                },
+                {
+                    title: "Open Digital Creative Project Showcase",
+                    sponsor: "Creative Commons Digital",
+                    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+                    duration: 15
+                },
+                {
+                    title: "Ocean Discovery & Marine Science Documentary",
+                    sponsor: "Earth Science Media",
+                    src: "https://vjs.zencdn.net/v/oceans.mp4",
+                    duration: 15
+                }
+            ];
+
+            // Pick a rotating video based on visit count
+            let lastIdx = parseInt(localStorage.getItem('k12LastVideoIdx') || '-1', 10);
+            let currentIdx = (lastIdx + 1) % SPONSOR_PLAYLIST.length;
+            localStorage.setItem('k12LastVideoIdx', String(currentIdx));
+            const currentVideo = SPONSOR_PLAYLIST[currentIdx];
+
+            const TOTAL_DURATION_SEC = currentVideo.duration || 15;
             let remainingSec = TOTAL_DURATION_SEC;
             let isCompleted = false;
 
@@ -468,6 +515,22 @@
             const btnAction = document.getElementById('btn-action');
             const adVideo = document.getElementById('ad-video');
             const btnToggleSound = document.getElementById('btn-toggle-sound');
+            const videoSponsorText = document.getElementById('video-sponsor-text');
+            const durationReqLabel = document.getElementById('duration-req-label');
+
+            if (durationReqLabel) durationReqLabel.textContent = TOTAL_DURATION_SEC + ' giây';
+            if (videoSponsorText) videoSponsorText.textContent = currentVideo.sponsor + ' • MONETAG';
+            if (videoStatusTitle) videoStatusTitle.textContent = currentVideo.title;
+
+            // Load and play selected video
+            if (adVideo) {
+                adVideo.src = currentVideo.src;
+                adVideo.load();
+                adVideo.play().catch(function() {
+                    adVideo.muted = true;
+                    adVideo.play().catch(function(_) {});
+                });
+            }
 
             // Sound toggle handler
             if (btnToggleSound && adVideo) {
@@ -484,15 +547,6 @@
                 });
             }
 
-            // Ensure video starts playing immediately
-            if (adVideo) {
-                adVideo.play().catch(function() {
-                    // Fallback to muted play if browser policy restricts audio
-                    adVideo.muted = true;
-                    adVideo.play().catch(function(_) {});
-                });
-            }
-
             function updateDisplay() {
                 const elapsed = Math.max(0, TOTAL_DURATION_SEC - remainingSec);
                 const percent = Math.min(100, Math.round((elapsed / TOTAL_DURATION_SEC) * 100));
@@ -504,14 +558,8 @@
                     videoTimeChip.textContent = '0:' + secFormatted;
                 }
 
-                if (videoStatusTitle) {
-                    if (remainingSec > 10) {
-                        videoStatusTitle.textContent = 'Đang phát video quảng cáo tài trợ...';
-                    } else if (remainingSec > 5) {
-                        videoStatusTitle.textContent = 'Đang xem: Hệ thống ghi nhận tiến trình xem video...';
-                    } else if (remainingSec > 0) {
-                        videoStatusTitle.textContent = 'Sắp hoàn tất: Chuẩn bị cấp quyền sử dụng 24h...';
-                    }
+                if (btnAction && !isCompleted) {
+                    btnAction.textContent = '⏳ Vui lòng xem hết video quảng cáo (' + remainingSec + 's)...';
                 }
             }
 
@@ -615,7 +663,7 @@
                 if (progressBar) progressBar.style.width = '100%';
                 if (countdownNum) countdownNum.textContent = '0';
                 if (videoTimeChip) videoTimeChip.textContent = '✓ ĐÃ XONG';
-                if (videoStatusTitle) videoStatusTitle.textContent = '✓ Đã Xem Xong Video Tài Trợ!';
+                if (videoStatusTitle) videoStatusTitle.textContent = '✓ Đã Xem Xong Video Tài Trợ: ' + currentVideo.title;
 
                 if (successBox) successBox.style.display = 'block';
 
@@ -634,12 +682,12 @@
                 }, 2500);
             }
 
-            // Attach click handler with CAPTURE phase to guarantee no clickjacking can intercept
+            // Attach click handler with CAPTURE phase to guarantee clean tab close
             if (btnAction) {
                 btnAction.addEventListener('click', executeCloseTab, true);
             }
 
-            // Start 15s timer
+            // Start countdown timer
             const interval = setInterval(function() {
                 remainingSec--;
                 updateDisplay();
